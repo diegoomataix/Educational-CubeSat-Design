@@ -1,0 +1,66 @@
+# MÓDULO ADCS - CORRECCIÓN DE PROBLEMAS
+
+David Criado Pernia
+
+Daniel Lubián Arenillas
+
+5 de septiembre de 2018
+
+## Al abrir la GUI, no aparece el modelo y en la Ventana de comandos de Matlab aparecen errores
+
+Es posible que no esté bien configurada la ruta/dirección de la hoja Excel. 
+
+No funciona cambiar la dirección en `settings.json`, hay que cambiarlo en el código.
+
+Ir a la línea 27 de `Database.m` y cambiar la dirección en `obj.filename` a la dirección correcta. Conviene usar direcciones relativas del tipo `../IDR_ADCS.xlsx`
+
+## Al pulsar la X de cerrar ventana, la ventana no se cierra
+
+La versión original de la GUI se hizo en Matlab r2017b, donde existe la función `uiconfirm` para AppDesigner. Dos opciones:
+
+* Actualizar a dicha versión de Matlab
+
+* En el AppDesigner, ir al ámbito de la función `UICloseRequest()` y hacer: 1) comentar todas las líneas; 2) escribir las siguientes líneas:
+```matlab
+            app.db.log('GUI closed')
+            delete(app)
+```
+
+## El modelo no se exporta a Excel cuando está vacío
+
+La versión original de la GUI se hizo en Matlab r2017b, donde existe la función `uiconfirm` para AppDesigner. Dos opciones:
+
+* Actualizar a dicha versión de Matlab
+
+* En el AppDesigner, ir al ámbito de la función `ExportModelButtonPushed()` y escribir:
+```matlab
+%             if size(app.model.table,1) == 0
+%                 selection = uiconfirm(app.UI,'There are no items selected. Exporting an empty model will erase the previous data in the spreadsheet. Do you want to continue?','Please confirm','Options',{'Yes','No'},'DefaultOption',1,'CancelOption',2);
+%                 if strcmpi(selection,'yes')
+%                     do_it = true;
+%                 else
+%                     do_it = false;
+%                 end
+%             else
+%                 do_it = true;
+%             end
+            do_it = true;
+            % Proceed with exporting
+            if do_it
+                % Check if file exists
+                if ~xlsfinfo(app.db.filename)
+                    uialert(app.UI,'Excel file does not exist. Check the name of the file.','Model not exported.','Icon','error','Modal',true);
+                else
+                    % Check if file is open by other program
+                    [fid, ~] = fopen(app.db.filename,'a');
+                    if fid==-1
+                        uialert(app.UI,'Please, close the Excel file.','Excel file opened. Model not exported.','Icon','error','Modal',true);
+                    else
+                        fclose(fid);
+                        % Export items
+                        app.model.exportModel(app);
+                        uialert(app.UI,'Model exported to Excel file successfully.','Exporting ended','Icon','success','Modal',true);
+                    end
+                end
+            end
+```
