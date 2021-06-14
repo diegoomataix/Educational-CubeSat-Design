@@ -1,0 +1,56 @@
+{
+    "custom": {
+        "filename": "IDR_ADCS.xlsx",
+        "sheetnames": [
+            {
+                "scope": "database",
+                "name": "Database"
+            },
+            {
+                "scope": "model",
+                "name": "Model"
+            }
+        ],
+        "searchresults": {
+            "name": true,
+            "supplier": true,
+            "mass": true,
+            "power": true,
+            "cubesat": false,
+            "cots": false,
+            "dimensions": true,
+            "thermal": true,
+            "electrical": false,
+            "specific": true,
+            "lifespan": false,
+            "price": false
+        }
+    },
+    "default": {
+        "filename": "IDR_AOCS.xlsx",
+        "sheetnames": [
+            {
+                "scope": "database",
+                "name": "Database"
+            },
+            {
+                "scope": "model",
+                "name": "Model"
+            }
+        ],
+        "searchresults": {
+            "name": true,
+            "supplier": true,
+            "mass": true,
+            "power": true,
+            "cubesat": false,
+            "cots": false,
+            "dimensions": true,
+            "thermal": true,
+            "electrical": false,
+            "specific": true,
+            "lifespan": false,
+            "price": false
+        }
+    }
+}
